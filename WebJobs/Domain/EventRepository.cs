@@ -1,0 +1,43 @@
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Domain
+{
+    public class EventRepository<T>
+    {
+        private string Type = typeof(T).ToString();
+
+        public void Create(T model)
+        {
+            using (var context = new EventContext())
+            {
+                context.Events.Add(
+                    new Event
+                    {
+                        Type = this.Type,
+                        Json = JsonConvert.SerializeObject(model)
+                    });
+                context.SaveChanges();
+            }
+        }
+
+        public ICollection<T> Get()
+        {
+            var retVal = new List<T>();
+            using (var context = new EventContext())
+            {
+                var jsonObjects =
+                    (from e in context.Events
+                     orderby e.Id
+                     where e.Type == this.Type
+                     select e.Json).ToList();
+
+                retVal = (from json in jsonObjects
+                          select JsonConvert.DeserializeObject<T>(json)).ToList();
+            }
+
+            return retVal;
+        }
+    }
+}

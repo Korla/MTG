@@ -1,0 +1,11 @@
+C:\Projects\MTG\WebJobs\Infrastructure\bin\Debug\Infrastructure.dll
+C:\Projects\MTG\WebJobs\Infrastructure\bin\Debug\Infrastructure.pdb
+C:\Projects\MTG\WebJobs\Infrastructure\bin\Debug\Domain.dll
+C:\Projects\MTG\WebJobs\Infrastructure\bin\Debug\EntityFramework.dll
+C:\Projects\MTG\WebJobs\Infrastructure\bin\Debug\Newtonsoft.Json.dll
+C:\Projects\MTG\WebJobs\Infrastructure\bin\Debug\Domain.pdb
+C:\Projects\MTG\WebJobs\Infrastructure\bin\Debug\EntityFramework.xml
+C:\Projects\MTG\WebJobs\Infrastructure\bin\Debug\Newtonsoft.Json.xml
+C:\Projects\MTG\WebJobs\Infrastructure\obj\Debug\Infrastructure.csprojResolveAssemblyReference.cache
+C:\Projects\MTG\WebJobs\Infrastructure\obj\Debug\Infrastructure.dll
+C:\Projects\MTG\WebJobs\Infrastructure\obj\Debug\Infrastructure.pdb

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="EventContext-Web.config Connection String" description="EventContext Connection String used in web.config by the application to access the database." defaultValue="Data Source=(localdb)\v11.0; Initial Catalog=Events; Integrated Security=True; MultipleActiveResultSets=True;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Projects\\MTG\\WebJobs\\WebJobs\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='EventContext']/@connectionString" />
+  </parameter>
+  <parameter name="AzureWebJobsDashboard-Web.config Connection String" description="AzureWebJobsDashboard Connection String used in web.config by the application to access the database." defaultValue="DefaultEndpointsProtocol=https;AccountName=korlasupernova;AccountKey=dpMaLPq9mNfda7YHGI9tNw5w9nUfIonfB/6GeVaDveGglpQcr6YTJMuOrf80Ek3KraAQvz1L6sO6Ul+4WwgMEg==" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Projects\\MTG\\WebJobs\\WebJobs\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='AzureWebJobsDashboard']/@connectionString" />
+  </parameter>
+  <parameter name="AzureWebJobsStorage-Web.config Connection String" description="AzureWebJobsStorage Connection String used in web.config by the application to access the database." defaultValue="DefaultEndpointsProtocol=https;AccountName=korlasupernova;AccountKey=dpMaLPq9mNfda7YHGI9tNw5w9nUfIonfB/6GeVaDveGglpQcr6YTJMuOrf80Ek3KraAQvz1L6sO6Ul+4WwgMEg==" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Projects\\MTG\\WebJobs\\WebJobs\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='AzureWebJobsStorage']/@connectionString" />
+  </parameter>
+</parameters>
