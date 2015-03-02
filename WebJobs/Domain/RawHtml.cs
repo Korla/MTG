@@ -7,5 +7,7 @@ namespace Domain
         public DateTime date = DateTime.Now;
 
         public string Url { get; set; }
+
+        public string Text { get; set; }
     }
 }

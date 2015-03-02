@@ -16,13 +16,7 @@ namespace ConsoleApplication1
         {
             //GetCardsAndBoosters();
 
-            ParseCards();
-
-            var i = 1;
-            foreach(var c in new EventRepository<RawSuperNovaCards>().Get())
-            {
-                Console.WriteLine(i++);
-            }
+            //ParseCards();
 
             Console.ReadLine();
         }
@@ -34,10 +28,10 @@ namespace ConsoleApplication1
             var parser = new SuperNovaParser(lines);
 
             var cardRepository = new EventRepository<Card>();
-            parser.cards.ToList().ForEach(cardRepository.Create);
+            parser.cards.ToList().ForEach(card => cardRepository.Create(card.Name, card));
 
             var setRepository = new EventRepository<Set>();
-            parser.sets.ToList().ForEach(setRepository.Create);
+            parser.sets.ToList().ForEach(set => setRepository.Create(set.Name, set));
 
             new EventRepository<Card>().Get().ToList().ForEach(x => Console.WriteLine(x.Name));
         }
@@ -45,15 +39,15 @@ namespace ConsoleApplication1
         {
             var cardsUrl = "http://supernovabots.com/prices_0.txt";
             var cardsText = new HttpService().Get(cardsUrl);
-            var rawCards = new RawSuperNovaCards { Text = cardsText, Url = cardsUrl };
+            var rawCards = new RawHtml { Text = cardsText, Url = cardsUrl };
             
-            new EventRepository<RawSuperNovaCards>().Create(rawCards);
+            new EventRepository<RawHtml>().Create("SuperNovaCards", rawCards);
 
             var boostersUrl = "http://supernovabots.com/prices_6.txt";
             var boostersText = new HttpService().Get(boostersUrl);
-            var rawBoosters = new RawSuperNovaBoosters { Text = cardsText, Url = boostersUrl };
+            var rawBoosters = new RawHtml { Text = cardsText, Url = boostersUrl };
             
-            new EventRepository<RawSuperNovaBoosters>().Create(rawBoosters);
+            new EventRepository<RawHtml>().Create("SuperNovaBoosters", rawBoosters);
         }
     }
 }

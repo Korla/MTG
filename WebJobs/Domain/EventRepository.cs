@@ -8,13 +8,14 @@ namespace Domain
     {
         private string Type = typeof(T).ToString();
 
-        public void Create(T model)
+        public void Create(string entity, T model)
         {
             using (var context = new EventContext())
             {
                 context.Events.Add(
                     new Event
                     {
+                        Entity = entity,
                         Type = this.Type,
                         Json = JsonConvert.SerializeObject(model)
                     });

@@ -49,6 +49,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\201502272320486_InitialCreate.cs" />
+    <Compile Include="Migrations\201502272320486_InitialCreate.Designer.cs">
+      <DependentUpon>201502272320486_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503022142334_AddEventEntity.cs" />
+    <Compile Include="Migrations\201503022142334_AddEventEntity.Designer.cs">
+      <DependentUpon>201503022142334_AddEventEntity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Set.cs" />
     <Compile Include="Card.cs" />
     <Compile Include="EventContext.cs" />
@@ -62,6 +71,14 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201502272320486_InitialCreate.resx">
+      <DependentUpon>201502272320486_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503022142334_AddEventEntity.resx">
+      <DependentUpon>201503022142334_AddEventEntity.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

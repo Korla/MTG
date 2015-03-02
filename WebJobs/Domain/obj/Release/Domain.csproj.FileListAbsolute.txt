@@ -10,3 +10,6 @@ C:\Projects\MTG\WebJobs\Domain\bin\Release\Newtonsoft.Json.xml
 C:\Projects\MTG\WebJobs\Domain\obj\Release\Domain.dll
 C:\Projects\MTG\WebJobs\Domain\obj\Release\Domain.pdb
 C:\Projects\MTG\WebJobs\Domain\obj\Release\Domain.csprojResolveAssemblyReference.cache
+C:\Projects\MTG\WebJobs\Domain\obj\Release\Domain.Migrations.InitialCreate.resources
+C:\Projects\MTG\WebJobs\Domain\obj\Release\Domain.Migrations.AddEventEntity.resources
+C:\Projects\MTG\WebJobs\Domain\obj\Release\Domain.csproj.GenerateResource.Cache

@@ -22,17 +22,17 @@ namespace SuperNovabots
 
             var cardsUrl = "http://supernovabots.com/prices_0.txt";
             var cardsText = new HttpService().Get(cardsUrl);
-            var rawCards = new RawSuperNovaCards { Text = cardsText, Url = cardsUrl };
+            var rawCards = new RawHtml { Text = cardsText, Url = cardsUrl };
 
             log.WriteLine("Storing RawSuperNovaCards");
-            new EventRepository<RawSuperNovaCards>().Create(rawCards);
+            new EventRepository<RawHtml>().Create("SuperNovaCards", rawCards);
 
             var boostersUrl = "http://supernovabots.com/prices_6.txt";
             var boostersText = new HttpService().Get(boostersUrl);
-            var rawBoosters = new RawSuperNovaBoosters { Text = cardsText, Url = boostersUrl };
+            var rawBoosters = new RawHtml { Text = cardsText, Url = boostersUrl };
 
             log.WriteLine("Storing RawSuperNovaBoosters");
-            new EventRepository<RawSuperNovaBoosters>().Create(rawBoosters);
+            new EventRepository<RawHtml>().Create("SuperNovaBoosters", rawBoosters);
         }
     }
 }
