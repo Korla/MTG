@@ -40,5 +40,23 @@ namespace Domain
 
             return retVal;
         }
+
+        public ICollection<T> Get(string entity)
+        {
+            var retVal = new List<T>();
+            using (var context = new EventContext())
+            {
+                var jsonObjects =
+                    (from e in context.Events
+                     orderby e.Id
+                     where e.Type == this.Type && e.Entity == entity
+                     select e.Json).ToList();
+
+                retVal = (from json in jsonObjects
+                          select JsonConvert.DeserializeObject<T>(json)).ToList();
+            }
+
+            return retVal;
+        }
     }
 }

@@ -7,10 +7,10 @@ namespace Infrastructure
 {
     public class SuperNovaParser
     {
-        public SuperNovaParser(IEnumerable<string> l)
+        public SuperNovaParser(RawHtml html)
         {
-            var now = DateTime.Now;
-            var lines = l.Where(x => x != string.Empty);
+            var date = html.date;
+            var lines = html.Text.Split(new string[] { "\n" }, StringSplitOptions.None).Where(x => x != string.Empty);
             var masterLine = lines.First(x => x.StartsWith("Name"));
             var indexOfBuy = masterLine.IndexOf("Buy");
             var indexOfSell = masterLine.IndexOf("Sell");
@@ -35,7 +35,7 @@ namespace Infrastructure
                                 Name = cardRow.Split('[')[0].Trim(),
                                 Buy = this.GetCost(cardRow, indexOfBuy),
                                 Sell = this.GetCost(cardRow, indexOfSell),
-                                Date = now
+                                Date = date
                             }
                         ));
 
@@ -48,7 +48,7 @@ namespace Infrastructure
                         Cards = cardGroup.Select(card => card).ToList(),
                         TotalBuy = cardGroup.Sum(card => card.Buy),
                         TotalSell = cardGroup.Sum(card => card.Sell),
-                        Date = now
+                        Date = date
                     });
         }
 

@@ -18,22 +18,21 @@ namespace ConsoleApplication1
 
             //ParseCards();
 
+            var lines = new EventRepository<RawHtml>().Get("SuperNovaCards");
+            lines.ToList().ForEach(ParseCards);
+
             Console.ReadLine();
         }
 
-        public static void ParseCards()
+        public static void ParseCards(RawHtml cards)
         {
-            var lines = new EventRepository<RawSuperNovaCards>().Get().First().Text.Split(new string[] { "\n" }, StringSplitOptions.None);
-
-            var parser = new SuperNovaParser(lines);
+            var parser = new SuperNovaParser(cards);
 
             var cardRepository = new EventRepository<Card>();
             parser.cards.ToList().ForEach(card => cardRepository.Create(card.Name, card));
 
             var setRepository = new EventRepository<Set>();
             parser.sets.ToList().ForEach(set => setRepository.Create(set.Name, set));
-
-            new EventRepository<Card>().Get().ToList().ForEach(x => Console.WriteLine(x.Name));
         }
         public static void GetCardsAndBoosters()
         {

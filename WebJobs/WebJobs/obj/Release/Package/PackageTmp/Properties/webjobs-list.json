@@ -3,6 +3,12 @@
   "WebJobs": [
     {
       "filePath": "../SuperNovabots/SuperNovabots.csproj"
+    },
+    {
+      "filePath": "../ParseSuperNovaCards/ParseSuperNovaCards.csproj"
+    },
+    {
+      "filePath": "../TestProgram/TestProgram.csproj"
     }
   ]
 }

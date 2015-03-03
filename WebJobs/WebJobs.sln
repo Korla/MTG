@@ -31,6 +31,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "Cons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{8A807901-E3AB-41C1-ADA7-0F2CEF05D578}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Jobs", "Jobs", "{6C9BFDCA-B180-40D8-9359-FB302D83C0ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParseSuperNovaCards", "ParseSuperNovaCards\ParseSuperNovaCards.csproj", "{34A17E8A-C145-4785-91FB-FF04147EB69B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProgram", "TestProgram\TestProgram.csproj", "{D806384F-F3F5-4D01-BB51-87768991F9EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,11 +63,22 @@ Global
 		{8A807901-E3AB-41C1-ADA7-0F2CEF05D578}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A807901-E3AB-41C1-ADA7-0F2CEF05D578}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A807901-E3AB-41C1-ADA7-0F2CEF05D578}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34A17E8A-C145-4785-91FB-FF04147EB69B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34A17E8A-C145-4785-91FB-FF04147EB69B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34A17E8A-C145-4785-91FB-FF04147EB69B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34A17E8A-C145-4785-91FB-FF04147EB69B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D806384F-F3F5-4D01-BB51-87768991F9EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D806384F-F3F5-4D01-BB51-87768991F9EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D806384F-F3F5-4D01-BB51-87768991F9EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D806384F-F3F5-4D01-BB51-87768991F9EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1709D675-A673-47B3-8B3B-D4BEC8670F27} = {25407DF1-B83D-478D-8559-835B95F48A11}
+		{D8637271-4C41-4AF8-945A-45A66F26CE03} = {6C9BFDCA-B180-40D8-9359-FB302D83C0ED}
+		{34A17E8A-C145-4785-91FB-FF04147EB69B} = {6C9BFDCA-B180-40D8-9359-FB302D83C0ED}
+		{D806384F-F3F5-4D01-BB51-87768991F9EC} = {6C9BFDCA-B180-40D8-9359-FB302D83C0ED}
 	EndGlobalSection
 EndGlobal
