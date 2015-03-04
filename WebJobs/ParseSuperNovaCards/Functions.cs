@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Infrastructure;
 using Domain;
+using System;
 
 namespace ParseSuperNovaCards
 {
     public class Functions
     {
-        public static void WaitForMessage([QueueTrigger("SuperNovaCards")] RawHtml rawCards)
+        public static void WaitForMessage([QueueTrigger("SuperNovaCards")] DateTime date)
         {
+            var rawCards = new EventRepository<RawHtml>().Get("RawSuperNovaCards").First(x => x.date == date);
             var parser = new SuperNovaParser(rawCards);
 
             var cardRepository = new EventRepository<Card>();

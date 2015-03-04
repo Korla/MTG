@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Domain;
 using Infrastructure;
+using System;
 
 namespace SuperNovabots
 {
@@ -14,11 +15,11 @@ namespace SuperNovabots
         // This function will be triggered based on the schedule you have set for this WebJob
         // This function will enqueue a message on an Azure Queue called queue
         [NoAutomaticTrigger]
-        public static void ManualTrigger(TextWriter log, int value, [Queue("SuperNovaCards")] out RawHtml rawCards)
+        public static void ManualTrigger(TextWriter log, int value)
         {
             var cardsUrl = "http://supernovabots.com/prices_0.txt";
             var cardsText = new HttpService().Get(cardsUrl);
-            rawCards = new RawHtml { Text = cardsText, Url = cardsUrl };
+            var rawCards = new RawHtml { Text = cardsText, Url = cardsUrl };
 
             log.WriteLine("Storing RawSuperNovaCards");
             new EventRepository<RawHtml>().Create("SuperNovaCards", rawCards);
