@@ -5,10 +5,10 @@
       "filePath": "../SuperNovabots/SuperNovabots.csproj"
     },
     {
-      "filePath": "../ParseSuperNovaCards/ParseSuperNovaCards.csproj"
+      "filePath": "../TestProgram/TestProgram.csproj"
     },
     {
-      "filePath": "../TestProgram/TestProgram.csproj"
+      "filePath": "../ParseSuperNovaCards/ParseSuperNovaCards.csproj"
     }
   ]
 }

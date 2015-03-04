@@ -18,8 +18,7 @@ namespace ConsoleApplication1
 
             //ParseCards();
 
-            var lines = new EventRepository<RawHtml>().Get("SuperNovaCards");
-            lines.ToList().ForEach(ParseCards);
+            var cards = new EventRepository<Card>().Get();
 
             Console.ReadLine();
         }

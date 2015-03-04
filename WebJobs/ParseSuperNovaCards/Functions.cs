@@ -1,27 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
-using Infrastructure;
 using Domain;
-using System;
+using Infrastructure;
 
 namespace ParseSuperNovaCards
 {
     public class Functions
     {
-        public static void WaitForMessage([QueueTrigger("SuperNovaCards")] DateTime date)
+        // This function will get triggered/executed when a new message is written 
+        // on an Azure Queue called queue.
+        public static void ProcessQueueMessage([QueueTrigger("RawSuperNovaCards")] string rawHtmlId, TextWriter log)
         {
-            var rawCards = new EventRepository<RawHtml>().Get("RawSuperNovaCards").First(x => x.date == date);
-            var parser = new SuperNovaParser(rawCards);
+            Console.WriteLine("Fetching from database, date: " + rawHtmlId);
+
+            var superNovaCardsHtml = new EventRepository<RawHtml>().Get(Int32.Parse(rawHtmlId));
+
+            Console.WriteLine("Begin parsing cards, date: " + rawHtmlId);
+
+            var parser = new SuperNovaParser(superNovaCardsHtml);
 
             var cardRepository = new EventRepository<Card>();
             parser.cards.ToList().ForEach(card => cardRepository.Create(card.Name, card));
 
             var setRepository = new EventRepository<Set>();
             parser.sets.ToList().ForEach(set => setRepository.Create(set.Name, set));
+
+            Console.WriteLine("Done parsing cards, date: " + rawHtmlId);
         }
     }
 }

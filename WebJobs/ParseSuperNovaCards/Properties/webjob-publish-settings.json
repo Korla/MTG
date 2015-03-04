@@ -1,9 +1,9 @@
 ﻿{
   "$schema": "http://schemastore.org/schemas/json/webjob-publish-settings.json",
   "webJobName": "ParseSuperNovaCards",
-  "startTime": "2015-03-03T22:30:00+01:00",
+  "startTime": null,
   "endTime": null,
-  "jobRecurrenceFrequency": "Hour",
-  "interval": 4,
-  "runMode": "Scheduled"
+  "jobRecurrenceFrequency": null,
+  "interval": null,
+  "runMode": "Continuous"
 }

@@ -8,19 +8,22 @@ namespace Domain
     {
         private string Type = typeof(T).ToString();
 
-        public void Create(string entity, T model)
+        public Event Create(string entity, T model)
         {
+            var e = new Event
+            {
+                Entity = entity,
+                Type = this.Type,
+                Json = JsonConvert.SerializeObject(model)
+            };
             using (var context = new EventContext())
             {
-                context.Events.Add(
-                    new Event
-                    {
-                        Entity = entity,
-                        Type = this.Type,
-                        Json = JsonConvert.SerializeObject(model)
-                    });
+                context.Events.Add(e);
+                    
                 context.SaveChanges();
             }
+
+            return e;
         }
 
         public ICollection<T> Get()
@@ -54,6 +57,19 @@ namespace Domain
 
                 retVal = (from json in jsonObjects
                           select JsonConvert.DeserializeObject<T>(json)).ToList();
+            }
+
+            return retVal;
+        }
+
+        public T Get(int id)
+        {
+            T retVal = default(T);
+            using (var context = new EventContext())
+            {
+                var json = context.Events.First(e => e.Id == id).Json;
+
+                retVal = JsonConvert.DeserializeObject<T>(json);
             }
 
             return retVal;
