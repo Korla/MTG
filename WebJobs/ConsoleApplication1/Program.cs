@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.IO;
 using Infrastructure;
+using System.Globalization;
 
 namespace ConsoleApplication1
 {
@@ -18,7 +19,11 @@ namespace ConsoleApplication1
 
             //ParseCards();
 
-            var cards = new EventRepository<Card>().Get();
+            //var cards = new EventRepository<RawHtml>().Get(1);
+            //ParseCards(cards);
+
+            var d = double.Parse("3.5", CultureInfo.InvariantCulture);
+            var e = double.Parse("3,5", CultureInfo.InvariantCulture);
 
             Console.ReadLine();
         }

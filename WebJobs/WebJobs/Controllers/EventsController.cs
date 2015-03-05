@@ -11,5 +11,16 @@ namespace WebJobs.Controllers
         {
             return new EventRepository<T>().Get();
         }
+
+        public virtual ICollection<T> GetEntity(string Id)
+        {
+            var d = new EventRepository<T>().Get(Id);
+            return d;
+        }
+
+        public virtual T GetEvent(int Id)
+        {
+            return new EventRepository<T>().Get(Id);
+        }
     }
 }
