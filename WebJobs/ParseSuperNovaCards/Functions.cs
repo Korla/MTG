@@ -25,7 +25,7 @@ namespace ParseSuperNovaCards
             var parser = new SuperNovaParser(superNovaCardsHtml);
 
             var cardRepository = new EventRepository<Card>();
-            parser.cards.ToList().ForEach(card => cardRepository.Create(card.Name, card));
+            cardRepository.Create(parser.cards, (card => card.GetEntity()));
 
             var setRepository = new EventRepository<Set>();
             parser.sets.ToList().ForEach(set => setRepository.Create(set.Name, set));

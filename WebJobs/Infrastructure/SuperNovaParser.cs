@@ -1,6 +1,7 @@
 ﻿using Domain;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace Infrastructure
@@ -20,7 +21,8 @@ namespace Infrastructure
 
             var cardsBySet = lines.Select((line, index) => new { line, index }).Where(x => x.line.StartsWith("==="))
                 .Select(setLine =>
-                    new {
+                    new
+                    {
                         name = setLine.line.Split(new string[] { "===" }, StringSplitOptions.None)[1].Trim(),
                         cardRows = lines.Skip(setLine.index + 1).TakeWhile(x => !x.StartsWith("===")).ToList()
                     });
@@ -45,7 +47,7 @@ namespace Infrastructure
                     new Set
                     {
                         Name = cardGroup.Key,
-                        Cards = cardGroup.Select(card => card).ToList(),
+                        Cards = cardGroup.Select(card => card.Name).ToList(),
                         TotalBuy = cardGroup.Sum(card => card.Buy),
                         TotalSell = cardGroup.Sum(card => card.Sell),
                         Date = date
@@ -55,10 +57,10 @@ namespace Infrastructure
         public IEnumerable<Card> cards { get; set; }
         public IEnumerable<Set> sets { get; set; }
 
-    private double GetCost(string cardRow, int position)
+        private double GetCost(string cardRow, int position)
         {
             var array = cardRow.Skip(position).TakeWhile(x => x.ToString() != " ").ToArray();
-            return array.Length > 0 ? Double.Parse(new string(array).Replace('.', ',')) : 0;
+            return array.Length > 0 ? Double.Parse(new string(array), CultureInfo.InvariantCulture) : 0;
         }
     }
 }

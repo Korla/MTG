@@ -58,13 +58,11 @@
       <DependentUpon>201503022142334_AddEventEntity.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Set.cs" />
-    <Compile Include="Card.cs" />
+    <Compile Include="Entities\Set.cs" />
+    <Compile Include="Entities\Card.cs" />
     <Compile Include="EventContext.cs" />
     <Compile Include="EventRepository.cs" />
-    <Compile Include="RawHtml.cs" />
-    <Compile Include="RawSuperNovaBoosters.cs" />
-    <Compile Include="RawSuperNovaCards.cs" />
+    <Compile Include="Entities\RawHtml.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

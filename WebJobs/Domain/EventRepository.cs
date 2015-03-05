@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,6 +25,19 @@ namespace Domain
             }
 
             return e;
+        }
+
+        public IEnumerable<Event> Create(IEnumerable<T> entities, Func<T, string> keySelector)
+        {
+            var events = entities.Select(model => new Event { Type = this.Type, Json = JsonConvert.SerializeObject(model), Entity = keySelector.Invoke(model) });
+            using (var context = new EventContext())
+            {
+                context.Events.AddRange(events);
+
+                context.SaveChanges();
+            }
+
+            return events;
         }
 
         public ICollection<T> Get()

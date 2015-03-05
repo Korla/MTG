@@ -19,11 +19,11 @@ namespace ConsoleApplication1
 
             //ParseCards();
 
-            //var cards = new EventRepository<RawHtml>().Get(1);
-            //ParseCards(cards);
+            var cards = new EventRepository<RawHtml>().Get(1);
+            ParseCards(cards);
 
-            var d = double.Parse("3.5", CultureInfo.InvariantCulture);
-            var e = double.Parse("3,5", CultureInfo.InvariantCulture);
+            //var d = double.Parse("3.5", CultureInfo.InvariantCulture);
+            //var e = double.Parse("3,5", CultureInfo.InvariantCulture);
 
             Console.ReadLine();
         }
@@ -33,10 +33,10 @@ namespace ConsoleApplication1
             var parser = new SuperNovaParser(cards);
 
             var cardRepository = new EventRepository<Card>();
-            parser.cards.ToList().ForEach(card => cardRepository.Create(card.Name, card));
+            cardRepository.Create(parser.cards, (card => card.GetEntity()));
 
             var setRepository = new EventRepository<Set>();
-            parser.sets.ToList().ForEach(set => setRepository.Create(set.Name, set));
+            setRepository.Create(parser.sets, (set => set.GetEntity()));
         }
         public static void GetCardsAndBoosters()
         {

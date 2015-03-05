@@ -2,7 +2,7 @@
 
 namespace WebJobs.Controllers
 {
-    public class CardController : EventsController<Card>
+    public class SetController : EventsController<Set>
     {
     }
 }

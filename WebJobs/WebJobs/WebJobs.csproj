@@ -180,6 +180,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\SetController.cs" />
     <Compile Include="Controllers\RawHtmlController.cs" />
     <Compile Include="Controllers\CardsController.cs" />
     <Compile Include="Controllers\EventsController.cs" />

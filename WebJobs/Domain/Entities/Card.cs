@@ -9,5 +9,10 @@ namespace Domain
         public double Buy { get; set; }
         public double Sell { get; set; }
         public DateTime Date { get; set; }
+
+        public string GetEntity()
+        {
+            return string.Format("{0},{1}", this.Name, this.SetName);
+        }
     }
 }
