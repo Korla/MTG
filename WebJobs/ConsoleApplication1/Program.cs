@@ -19,12 +19,10 @@ namespace ConsoleApplication1
 
             //ParseCards();
 
-            var cards = new EventRepository<RawHtml>().Get(1);
+            var cards = new EventRepository<RawHtml>().Get("SuperNovaCards").First();
             ParseCards(cards);
 
-            //var d = double.Parse("3.5", CultureInfo.InvariantCulture);
-            //var e = double.Parse("3,5", CultureInfo.InvariantCulture);
-
+            Console.WriteLine("Done");
             Console.ReadLine();
         }
 

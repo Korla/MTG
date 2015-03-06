@@ -58,6 +58,23 @@ namespace Domain
             return retVal;
         }
 
+        public T GetLatest()
+        {
+            var retVal = default(T);
+            using (var context = new EventContext())
+            {
+                var json =
+                    (from e in context.Events
+                     orderby e.Id descending
+                     where e.Type == this.Type
+                     select e.Json).First();
+
+                retVal = JsonConvert.DeserializeObject<T>(json);
+            }
+
+            return retVal;
+        }
+
         public ICollection<T> Get(string entity)
         {
             var retVal = new List<T>();
@@ -71,6 +88,23 @@ namespace Domain
 
                 retVal = (from json in jsonObjects
                           select JsonConvert.DeserializeObject<T>(json)).ToList();
+            }
+
+            return retVal;
+        }
+
+        public T GetLatestEntity(string entity)
+        {
+            var retVal = default(T);
+            using (var context = new EventContext())
+            {
+                var json =
+                    (from e in context.Events
+                     orderby e.Id descending
+                     where e.Type == this.Type && e.Entity == entity
+                     select e.Json).First();
+
+                retVal = JsonConvert.DeserializeObject<T>(json);
             }
 
             return retVal;

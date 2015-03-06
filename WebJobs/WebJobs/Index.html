@@ -2,8 +2,96 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
+
+    <style>
+        path {
+            stroke: #fff;
+        }
+
+        circle {
+            fill: #000;
+            pointer-events: none;
+        }
+    </style>
 </head>
 <body>
-    Success
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="Scripts/Bacon.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script>
+
+        var webAppRoot = "localhost:1769";
+        var width = 1500,
+            height = 1000;
+        var xMin, xMax, yMin, yMax;
+        var vertices = [];
+
+        var xProp = "Buy";
+        var yProp = "Sell";
+
+        $.get('http://' + webAppRoot + '/Api/Set/GetLatest').then(GetCards);
+
+        function GetCards(set) {
+            set.Cards.map(function (card) {
+                $.get('http://' + webAppRoot + '/Api/Card/GetLatestEntity/' + card + ',' + set.Name).then(function (card) { CreateVoronoi([card]); });
+            })
+        }
+
+        function CreateVoronoi(data) {
+            var newVertices = data.map(function (entity) {
+                xMin = Math.min(xMin || entity[xProp], entity[xProp]);
+                xMax = Math.max(xMax || entity[xProp], entity[xProp]);
+                yMin = Math.min(yMin || entity[yProp], entity[yProp]);
+                yMax = Math.max(yMax || entity[yProp], entity[yProp]);
+
+                return [entity[xProp], entity[yProp]];
+            }).map(function (entity) {
+                return [width * (entity[0] || 1) / (xMax - xMin), height * (entity[1] || 1) / (yMax - yMin)];
+            })
+            
+            vertices = vertices.concat(newVertices);
+
+            var entityCount = vertices.length;
+
+            var voronoi = d3.geom.voronoi()
+                .clipExtent([[0, 0], [width, height]]);
+
+            var svg = d3.select("body").append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            var path = svg.append("g").selectAll("path");
+
+            svg.selectAll("circle")
+                .data(vertices)
+                .enter().append("circle")
+                .attr("transform", function (d) { return "translate(" + d + ")"; })
+                .attr("r", 1.5);
+
+            path = path
+                .data(voronoi(vertices), polygon);
+
+            path.exit().remove();
+
+            path.enter().append("path")
+                .attr("style", function (d, i) {
+                    var out = 150;
+                    var val = (255 - out) * (i + 1) / entityCount;
+                    console.log(val);
+                    var value = ("" + val).split('.')[0];
+                    var fill = "rgb(" + (255 - value - out) + ",150," + (100 + value) + ");";
+                    return "fill: " + fill;
+                })
+                .attr("d", polygon);
+
+            path.order();
+
+            function polygon(d) {
+                return "M" + d.join("L") + "Z";
+            }
+        }
+
+    </script>
+
 </body>
 </html>
