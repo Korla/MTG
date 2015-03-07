@@ -17,28 +17,62 @@
 <body>
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script src="Scripts/Bacon.js"></script>
+    <script src="Scripts/Bacon.UI.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
+
+    XCap: <input type="text" id="xCap" />
+    YCap: <input type="text" id="yCap" />
+
+    Hovering: <span id="hovering"></span>
+
+    <div id="voronoi"></div>
+
     <script>
-
-        var webAppRoot = "localhost:1769";
-        var width = 1500,
-            height = 1000;
-        var xMin, xMax, yMin, yMax;
-        var vertices = [];
-
-        var xProp = "Buy";
-        var yProp = "Sell";
-
-        $.get('http://' + webAppRoot + '/Api/Set/GetLatest').then(GetCards);
-
-        function GetCards(set) {
-            set.Cards.map(function (card) {
-                $.get('http://' + webAppRoot + '/Api/Card/GetLatestEntity/' + card + ',' + set.Name).then(function (card) { CreateVoronoi([card]); });
-            })
+        function toCaps(xCap, yCap) {
+            return { xCap: xCap, yCap: yCap }
         }
 
-        function CreateVoronoi(data) {
-            var newVertices = data.map(function (entity) {
+        function toFilterByCapsInput(caps, sets) {
+            return { caps: caps, sets: sets }
+        }
+
+        function filterByCaps(input) {
+            var data = input.sets;
+            var xCap = input.caps.xCap;
+            var yCap = input.caps.yCap;
+
+            var filtered = data.filter(function (entity) {
+                return entity[xProp] < xCap && entity[xProp] > 0 && entity[yProp] < yCap && entity[yProp] > 0;
+            });
+
+            return filtered;
+        }
+
+        var xCap = Bacon.UI.textFieldValue($('#xCap'), 500);
+        var yCap = Bacon.UI.textFieldValue($('#yCap'), 400);
+        var caps = xCap.combine(yCap, toCaps);
+
+        var sets = Bacon.fromPromise($.ajax({ url: 'http://localhost:1769/Api/Set/Get' })).toProperty([]);
+        var inputs = caps.combine(sets, toFilterByCapsInput);
+
+        var filtered = inputs.map(filterByCaps);
+        filtered.onValue(createVoronoi);
+
+        var mouseoverBus = new Bacon.Bus();
+        mouseoverBus.onValue(function (entity) {
+            $('#hovering').text(entity.Name)
+        });
+
+        var width = 700,
+            height = 700;
+
+        var xProp = "TotalBuy";
+        var yProp = "TotalSell";
+
+        function createVoronoi(data) {
+            var xMin, xMax, yMin, yMax;
+
+            var vertices = data.map(function (entity) {
                 xMin = Math.min(xMin || entity[xProp], entity[xProp]);
                 xMax = Math.max(xMax || entity[xProp], entity[xProp]);
                 yMin = Math.min(yMin || entity[yProp], entity[yProp]);
@@ -46,17 +80,16 @@
 
                 return [entity[xProp], entity[yProp]];
             }).map(function (entity) {
-                return [width * (entity[0] || 1) / (xMax - xMin), height * (entity[1] || 1) / (yMax - yMin)];
-            })
-            
-            vertices = vertices.concat(newVertices);
+                return [width * (entity[0] - xMin) / (xMax - xMin), height * (entity[1] - yMin) / (yMax - yMin)];
+            });
 
             var entityCount = vertices.length;
 
             var voronoi = d3.geom.voronoi()
                 .clipExtent([[0, 0], [width, height]]);
 
-            var svg = d3.select("body").append("svg")
+            var svg = d3.select("#voronoi").html("")
+                .append("svg")
                 .attr("width", width)
                 .attr("height", height);
 
@@ -69,20 +102,17 @@
                 .attr("r", 1.5);
 
             path = path
-                .data(voronoi(vertices), polygon);
-
-            path.exit().remove();
-
-            path.enter().append("path")
+                .data(voronoi(vertices), polygon)
+                .enter().append("path")
                 .attr("style", function (d, i) {
-                    var out = 150;
+                    var out = 50;
                     var val = (255 - out) * (i + 1) / entityCount;
-                    console.log(val);
                     var value = ("" + val).split('.')[0];
                     var fill = "rgb(" + (255 - value - out) + ",150," + (100 + value) + ");";
                     return "fill: " + fill;
                 })
                 .attr("d", polygon);
+            path.on("mouseover", function (d, i) { mouseoverBus.push(data[i]); });
 
             path.order();
 
