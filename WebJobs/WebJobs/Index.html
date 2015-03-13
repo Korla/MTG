@@ -4,6 +4,10 @@
     <title></title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         path {
             stroke: #fff;
         }
@@ -206,6 +210,8 @@
                     var val = (255 - out) * (i + 1) / entityCount;
                     var value = ("" + val).split('.')[0];
                     var fill = "rgb(" + (255 - value - out) + ",150," + (100 + value) + ");";
+
+                    console.log(fill);
                     return "fill: " + fill;
                 })
                 .attr("d", polygon);
