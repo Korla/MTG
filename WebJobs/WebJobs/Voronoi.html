@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>JBSupernova</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        path {
+            stroke: #fff;
+        }
+
+        circle {
+            fill: #000;
+            pointer-events: none;
+        }
+
+        .setsContainer {
+            position: relative;
+            width: 540px;
+            height: 540px;
+        }
+
+        #voronoi {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            top: 20px;
+            left: 20px;
+        }
+
+        .filteredSets {
+            position: absolute;
+        }
+
+            .filteredSets .content {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            .filteredSets.horizontal {
+                left: 20px;
+                right: 20px;
+                height: 20px;
+                width: 500px;
+            }
+
+            .filteredSets.vertical {
+                top: 20px;
+                bottom: 20px;
+                width: 20px;
+                height: 500px;
+            }
+
+            .filteredSets.top {
+                top: 0;
+            }
+
+            .filteredSets.left {
+                left: 0;
+            }
+
+            .filteredSets.right {
+                right: 0;
+            }
+
+            .filteredSets.bottom {
+                bottom: 0;
+            }
+    </style>
+</head>
+<body>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="Scripts/Bacon.js"></script>
+    <script src="Scripts/Bacon.UI.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+
+    <div>
+        Minimum <span class="xPropText"></span>: <input type="text" id="xMin" />
+    </div>
+    <div>
+        Minimum <span class="yPropText"></span>: <input type="text" id="yMin" />
+    </div>
+    <div>
+        Maximum <span class="xPropText"></span>: <input type="text" id="xMax" />
+    </div>
+    <div>
+        Maximum <span class="yPropText"></span>: <input type="text" id="yMax" />
+    </div>
+    <div>
+        Hovering: <span id="hovering"></span>
+    </div>
+
+    <div class="setsContainer">
+        <span class="filteredSets horizontal top"><span class="content"></span></span>
+        <span class="filteredSets vertical left"><span class="content"></span></span>
+        <span id="voronoi"></span>
+        <span class="filteredSets vertical right"><span class="content"></span></span>
+        <span class="filteredSets horizontal bottom"><span class="content"></span></span>
+    </div>
+
+    <script>
+
+        var xProp = "TotalBuy";
+        var yProp = "TotalSell";
+
+        $('.xPropText').text(xProp);
+        $('.yPropText').text(yProp);
+
+        function filterByMax(input) {
+            return input.sets.filter(function (entity) {
+                return entity[xProp] <= input.xMax && entity[xProp] >= input.xMin && entity[yProp] <= input.yMax && entity[yProp] >= input.yMin;
+            });
+        }
+
+        var xMin = Bacon.UI.textFieldValue($('#xMin'), 0).map(parseFloat);
+        var yMin = Bacon.UI.textFieldValue($('#yMin'), 0).map(parseFloat);
+        var xMax = Bacon.UI.textFieldValue($('#xMax'), 600).map(parseFloat);
+        var yMax = Bacon.UI.textFieldValue($('#yMax'), 500).map(parseFloat);
+        var sets = Bacon.fromPromise($.ajax({ url: 'http://localhost:1769/Api/Set/Get' })).toProperty([])
+
+        Bacon.combineTemplate({
+            xMin: xMin,
+            yMin: yMin,
+            xMax: xMax,
+            yMax: yMax,
+            sets: sets
+        })
+            .map(filterByMax)
+            .onValue(createVoronoi);
+
+        function filterSetsLesser(input) {
+            return input[0].filter(function (entity) {
+                return entity[input[2]] > input[1];
+            });
+        }
+
+        function filterSetsGreater(input) {
+            return input[0].filter(function (entity) {
+                return entity[input[2]] < input[1];
+            });
+        }
+
+        function setFilteredValue(filteredControl) {
+            return function (filtered) {
+                filteredControl.text(filtered.length);
+            }
+        }
+
+        var aboveMaxX = Bacon.combineAsArray(sets, xMax, xProp).map(filterSetsLesser).onValue(setFilteredValue($('.filteredSets.right .content')));
+        var belowMinX = Bacon.combineAsArray(sets, xMin, xProp).map(filterSetsGreater).onValue(setFilteredValue($('.filteredSets.left .content')));
+        var aboveMaxY = Bacon.combineAsArray(sets, yMax, yProp).map(filterSetsLesser).onValue(setFilteredValue($('.filteredSets.bottom .content')));
+        var belowMinY = Bacon.combineAsArray(sets, yMin, yProp).map(filterSetsGreater).onValue(setFilteredValue($('.filteredSets.top .content')));
+
+        var mouseoverBus = new Bacon.Bus();
+        mouseoverBus.log();
+        mouseoverBus.onValue(function (entity) {
+            $('#hovering').text(entity.Name);
+        });
+
+        function createVoronoi(data) {
+            var element = $('#voronoi');
+            var width = element.width(),
+                height = element.height();
+
+            var xMin, xMax, yMin, yMax;
+
+            var vertices = data.map(function (entity) {
+                var movedX = entity[xProp] + 1000;
+                var movedY = entity[yProp] + 1000;
+                xMin = Math.min(xMin || movedX, movedX);
+                xMax = Math.max(xMax || movedX, movedX);
+                yMin = Math.min(yMin || movedY, movedY);
+                yMax = Math.max(yMax || movedY, movedY);
+
+                return [movedX, movedY];
+            }).map(function (coords) {
+                return [width * (coords[0] - xMin) / (xMax - xMin), height * (coords[1] - yMin) / (yMax - yMin)];
+            });
+
+            console.log(vertices.length);
+
+            var entityCount = vertices.length;
+
+            var voronoi = d3.geom.voronoi()
+                .clipExtent([[0, 0], [width, height]]);
+
+            var svg = d3.select("#voronoi").html("")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            var path = svg.append("g").selectAll("path");
+
+            svg.selectAll("circle")
+                .data(vertices)
+                .enter().append("circle")
+                .attr("transform", function (d) { return "translate(" + d + ")"; })
+                .attr("r", 1.5);
+
+            path = path
+                .data(voronoi(vertices), polygon)
+                .enter().append("path")
+                .attr("style", function (d, i) {
+                    var out = 50;
+                    var val = (255 - out) * (i + 1) / entityCount;
+                    var value = ("" + val).split('.')[0];
+                    var fill = "rgb(" + (255 - value - out) + ",150," + (100 + value) + ");";
+
+                    console.log(fill);
+                    return "fill: " + fill;
+                })
+                .attr("d", polygon);
+            path.on("mouseover", function (d, i) { mouseoverBus.push(data[i]); });
+            path.on("mouseout", function (d, i) { mouseoverBus.push({ Name: "" }); });
+
+            path.order();
+
+            function polygon(d) {
+                return "M" + d.join("L") + "Z";
+            }
+        }
+
+    </script>
+
+</body>
+</html>
